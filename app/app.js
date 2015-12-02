@@ -7,6 +7,9 @@ var phonecatAnimations = require("./animations.js");
 var phonecatControllers = require("./controllers.js");
 var phonecatFilters = require("./filters.js");
 var phonecatServices = require("./services.js");
+//var dk = require('./methods.js');
+//console.log('shiyixiaaaaaa');
+
 
 var phonecatApp = angular.module('myApp', [
   'ngRoute',

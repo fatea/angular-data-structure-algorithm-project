@@ -20,7 +20,7 @@ function dijkstra(G, w, s) {
     var u = extract_min(Q);
     //S = S U {u}
     S = _.union(S, [u]);
-    G.adj[u].forEach(
+    u.adj.forEach(
       function(v){
         relax(u, v, w);
       }

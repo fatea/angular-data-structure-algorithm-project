@@ -2,17 +2,20 @@
 class Graph{
 
    constructor(){
-    this.V = [];
-    this.E = [];
+    this.V = {};
+    this.E = {};
   }
 
 
 addVertex( v){
-  this.V.add(v);
+  this.V[v.name] = v;
 }
 
   addEdge(e){
-  this.E.add(e);
+    if (!( e.start in this.E)){
+  this.E[e.start] = {};
+    }
+    this.E[e.start][e.end] = e;
 }
 }
 

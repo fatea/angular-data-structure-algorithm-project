@@ -6,10 +6,28 @@
 /* Controllers */
 
 var phonecatControllers = angular.module('phonecatControllers', []);
-
-phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone', function($scope, Phone) {
+var dk = require('./methods.js');
+var Graph = require('./data_structures/Graph.js');
+/*
+var G = new Graph();
+G.addVertex('hello');
+G.addVertex('world');
+G.V[1].pi = G.V[0];
+var w = [][];*/
+phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone', function($scope, Phone, Map) {
   $scope.phones = Phone.query();
   $scope.orderProp = 'age';
+  $scope.edges = [];
+
+  /*
+  Map.success(function(data){
+    angular.forEach(data.split('\n'), function(line, index){
+      $scope.edges.push(line);
+    });
+  });
+  */
+
+  //$scope.dk = dk(G,);
   //console.log(dk);
 }]);
 
