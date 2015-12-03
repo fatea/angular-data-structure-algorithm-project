@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('lodash');
 class Graph{
 
    constructor(){
@@ -20,8 +21,10 @@ addVertex( v){
 
   w(u, v){
     var result = null;
-    if(v in u.adj){
+    if(_.some(this.V[u.name].adj, 'name', v.name)){
       try{
+
+        //var sth = this.E[u.name];
        result = this.E[u.name][v.name].w;
       }catch (error){
         result = this.E[v.name][u.name].w;
