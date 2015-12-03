@@ -1,7 +1,7 @@
 "use strict";
 var _ = require('lodash');
 
-var Heap = require('./data_structures/Heap.js').Heap;
+var Heap = require('./../../data_structures/Heap.js').Heap;
 
 function dijkstra(G, s) {
   //Dijkstra's algorithm solves the single-source shortest-paths problem on a weighted,
@@ -71,8 +71,8 @@ function initialize_heap(heap, V){
 
 
 //var Graph = require('./data_structures/Graph.js');
-var map = require('./Map.js');
-dijkstra(map, map.V['A']);
+//var map = require('./Map.js');
+//dijkstra(map, map.V['A']);
 
 //console.log('finish');
 module.exports = dijkstra;
