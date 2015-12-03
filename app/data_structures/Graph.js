@@ -17,6 +17,20 @@ addVertex( v){
     }
     this.E[e.start][e.end] = e;
 }
+
+  w(u, v){
+    var result = null;
+    if(v in u.adj){
+      try{
+       result = this.E[u.name][v.name].w;
+      }catch (error){
+        result = this.E[v.name][u.name].w;
+      }
+    }
+
+    return result;
+
+  }
 }
 
 module.exports = Graph;

@@ -6,8 +6,6 @@
 /* Controllers */
 
 var phonecatControllers = angular.module('phonecatControllers', []);
-var dk = require('./methods.js');
-var Graph = require('./data_structures/Graph.js');
 /*
 var G = new Graph();
 G.addVertex('hello');

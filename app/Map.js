@@ -54,6 +54,6 @@ Map.addEdge(new Edge(Map, 'W', 'X', 0.57, false, true));
 Map.addEdge(new Edge(Map, 'X', 'Y', 1.40));
 Map.addEdge(new Edge(Map, 'Y', 'Z', 0.97));
 
+module.exports = Map;
 
-
-console.log('test');
+//console.log('test');
