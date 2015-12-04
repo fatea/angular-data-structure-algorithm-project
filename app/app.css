@@ -40,6 +40,9 @@ div.panel {
 }
 
 div.panel.inputBox {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
   height:40%;
 }
 

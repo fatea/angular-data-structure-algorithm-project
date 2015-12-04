@@ -19,10 +19,11 @@ function shortest_path_of_two_given_locations(start, end){
       path_list.unshift(end_point.name);
     }
 
-
+    /*
     path_list.forEach(function(name){
       console.log(name);
     });
+    */
   }
 
 

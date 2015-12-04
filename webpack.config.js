@@ -14,6 +14,10 @@ module.exports = {
       {
         test:/\.css$/,
         loader: 'css-loader'
+      },
+      {
+        test: require.resolve('./app/bower_components/snap.svg/dist/snap.svg.js'),
+        loader: 'imports-loader?this=>window,fix=>module.exports=0'
       }
     ]
   }
