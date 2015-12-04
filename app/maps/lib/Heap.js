@@ -176,4 +176,4 @@
   exports.Heap.prototype.isEmpty = function () {
     return !this._heap.length;
   };
-})(typeof window === 'undefined' ? module.exports : window);
+})(module.exports);

@@ -1,8 +1,6 @@
-var Graph = require('./Graph.js');
-var Vertex = require('./Vertex.js');
-var Edge = require('./Edge.js');
-//var txt = require('./data_structures/Distance.txt');
-//console.log(txt);
+var Graph = require('./lib/Graph.js');
+var Vertex = require('./lib/Vertex.js');
+var Edge = require('./lib/Edge.js');
 
 function Map() {
   var map = new Graph();

@@ -18,7 +18,7 @@
 
   <script src="bundle.js"></script>
 </head>
-<body>
+<body ng-controller="mapControl">
 
 <!--
   <ul class="menu">
@@ -39,16 +39,51 @@
 
 <input ng-model="userInput"> Uppercased: {{userInput | uppercase}}
 -->
+<!-- TODO: 使用svg/d3 在地图上画出带颜色线-->
+<div class="map">
+  <svg id="map" version="1.1"
+     baseProfile="full"
+     width="1024" height="607"
+     xmlns="http://www.w3.org/2000/svg">
+  <image x="0" y="0" width="1024" height="607" xlink:href="./img/map.png"></image>
 
-<div class="view-container">
-  <div ng-view class="view-frame"></div>
+  <circle cx="150" cy="100" r="80" fill="transparent" />
+  <line x1="150" x2="100" y1="110" y2="150" stroke="orange" fill="transparent" stroke-width="5"/>
+  </svg>
+</div>
+
+<div class="panel">
+  <div class="panel inputBox">
+    <div  class="panel inputBox input start">
+      <span>起点: </span><input type="text" ng-model="startInput">
+    </div>
+
+    <div class="panel inputBox input end">
+      <span>终点: </span><input type="text" ng-model="endInput">
+    </div>
+    <ul>
+      <li>
+        <button id="walkingButton" ng-click="showPath()">我要步行</button>
+      </li>
+      <li>
+        <button id="drivingButton">我要开车</button>
+      </li>
+      <li>
+        <button id="busButton">公交优先</button>
+      </li>
+    </ul>
+
+
+
+    <input id="resetButton" type='reset' value='重置'/>
+  </div>
+  <div class="panel outputBox">
+    <textArea>{{path_str}}</textArea>
+  </div>
 </div>
 
 
-
-  <div>Angular seed app: v<span app-version></span></div>
-
-  <!-- In production use:
+   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
 <!--

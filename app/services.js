@@ -9,23 +9,13 @@ phonecatServices.factory('Phone', ['$resource',
     });
   }]);
 
-phonecatServices.factory('Map', ['$http',
+phonecatServices.factory('MapImg', ['$http',
   function($http){
-    //var list = [];
-    return $http.get('data_structures/Distance.txt');
-    /*
-    return $http.get('data_structures/Distance.txt').success(
+    $http.get('img/map.png').success(
       function(data){
-        angular.forEach(data.split('\n'), function(line,index){
-          list.push(line);
-        });
+        return data;
       }
-    );*/
-
-    /*return $http('data_structures/:name.txt',{}, {
-      //query: {method:'GET', params:{name: 'Distance'}, isArray:false}
-
-    });*/
+    );
 
   }
 

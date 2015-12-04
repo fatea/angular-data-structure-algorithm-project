@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -14,9 +15,35 @@
 
        <!--  <p>{{edges[0]}}</p> -->
 
+        <!-- TODO: 使用svg/d3 在地图上画出带颜色线-->
+            <svg id="map" version="1.1"
+                 baseProfile="full"
+                 width="1024" height="607"
+                 xmlns="http://www.w3.org/2000/svg">
+                <image x="0" y="0" width="1024" height="607"
+                       xlink:href="./img/map.png"/>
+
+                               <circle cx="150" cy="100" r="80" fill="transparent" />
+                <line x1="150" x2="100" y1="110" y2="150" stroke="orange" fill="transparent" stroke-width="5"/>
+
+
+            </svg>
+
+            <div id="controlPanel">
+            <span>起点: </span><input type="text">
+            <span>终点: </span>    <input type="text">
+
+            </div>
+
+
+
         </div>
+
+
+
+        <!--
         <div class="col-md-10">
-            <!--Body content-->
+
 
             <ul class="phones">
                 <li ng-repeat="phone in phones | filter:query | orderBy:orderProp"
@@ -28,5 +55,8 @@
             </ul>
 
         </div>
+        -- >
+
+
     </div>
 </div>

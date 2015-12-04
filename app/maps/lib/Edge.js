@@ -20,8 +20,7 @@ class Edge{
     }else {
       this.oneway_limit = oneway_limit;
     }
-    //this.pi = null;
-    //this.adj = [];
+
 
     if(this.oneway_limit == false){
       G.V[start].adj.push(G.V[end]);

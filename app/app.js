@@ -4,7 +4,7 @@
 
 
 var phonecatAnimations = require("./animations.js");
-var phonecatControllers = require("./controllers.js");
+var controllers = require("./controllers.js");
 var phonecatFilters = require("./filters.js");
 var phonecatServices = require("./services.js");
 
@@ -14,7 +14,7 @@ var phonecatServices = require("./services.js");
 var phonecatApp = angular.module('myApp', [
   'ngRoute',
   'phonecatAnimations',
-  'phonecatControllers',
+  'controllers',
   'phonecatFilters',
   'phonecatServices'
 ]);
@@ -24,16 +24,12 @@ var phonecatApp = angular.module('myApp', [
 phonecatApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-    when('/phones', {
-      templateUrl: 'phone-list/phone-list.html',
-      controller: 'PhoneListCtrl'
-    }).
-    when('/phones/:phoneId', {
-      templateUrl: 'phone-detail/phone-detail.html',
-      controller: 'PhoneDetailCtrl'
+    when('/index', {
+      templateUrl: 'index.html',
+      controller: 'mapControl'
     }).
     otherwise({
-      redirectTo: '/phones'
+      redirectTo: '/404'
     });
   }]);
 

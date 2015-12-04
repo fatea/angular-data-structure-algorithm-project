@@ -1,61 +1,151 @@
-/* app css stylesheet */
+@charset "utf-8";
 
-.phone-images {
-  background-color: white;
-  width: 450px;
-  height: 450px;
-  overflow: hidden;
-  position: relative;
-  float: left;
-}
-
-
-
-img.phone {
-  float: left;
-  margin-right: 3em;
-  margin-bottom: 2em;
-  background-color: white;
-  padding: 2em;
-  height: 400px;
-  width: 400px;
-  display: none;
-}
-
-img.phone:first-child {
-  display: block;
-}
-
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
+* {
   padding: 0;
+  margin: 0;
 }
 
 
+input, textarea {
+  font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+}
+
+body {
+  height: 800px;
+  width: 100%;
+  background-image: linear-gradient(to bottom right,#F0F1F1,#F0F1F1);
+}
+/*
+button {
+  width:40px;
+  height: 25px;
+}*/
+
+ul {
+  list-style-type: none;
+}
+
+
+div.map {
+  width: 1024px;
+  height: 607px;
+  float: left;
+}
+
+div.panel {
+  width : 300px;
+
+  float: left;
+
+}
+
+div.panel.inputBox {
+  height:40%;
+}
+
+
+/*
+#wrapper {
+  height: 230px;
+  width: 600px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -190px;
+  margin-left: -330px;
+}*/
+/*
+#controlPanel {
+  height: 100%;
+  width: 100%;
+
+
+  background: rgba(255,255,255,0.75);
+  background-clip: padding-box;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+
+}
+*/
+
+div.loginBoxMain {
+  margin-top: 30px;
+  margin-left: 112px;
+}
+p.loginBoxMain {
+  margin-top: 13px;
+  margin-bottom: 13px;
+
+}
+input.loginBoxMain {
+  width: 260px;
+  height: 30px;
+  font-size: 14px;
+  background-color: #FAFAFA;
+  margin-left: 14px;
+}
+
+hr {
+  border: 1px solid rgba(0,0,0,0.1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+div.loginBoxButtons {
+  float: right;
+  margin-right: 40px;
+}
+
+.buttons {
+  background-color: grey;
+  width: 80px;
+  height: 35px;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+  font-size: 16px;
+  margin-right: 20px;
+  cursor: pointer;
+
+}
+.submit {
+  background-color: #EF3043;
+  color: white;
+
+}
+.cancel {
+  background-image: linear-gradient(to bottom,#F0F1F1,#F0F1F1);
+
+}
+
+.submit:hover {
+  background: #37A2F9;
+}
+.cancel:hover {
+  color: white;
+  background: #2B303B;
+}
+
+span.alert {
+  display: none;
+  font-size: 10px;
+  color: red;
+}
+
+a.register {
+  float: right;
+  color: #3B70B7;
+}
 
 
