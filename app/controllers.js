@@ -21,7 +21,7 @@ controllers.controller('mapControl', ['$scope', function($scope) {
     console.log('test_debug');
     //console.log(shortest_path_of_two_given_locations('A', 'B'));
     //shortest_path_of_two_given_locations('A', 'B');
-    $scope.path_str = shortest_path_of_two_given_locations($scope.startInput, $scope.endInput)[0];
+    $scope.path_str = shortest_path_of_two_given_locations($scope.startInput, $scope.endInput).toString();
 
   };
 
