@@ -1,22 +1,64 @@
 
 'use strict';
+var _ = require('lodash');
+var Snap = require('./bower_components/snap.svg/dist/snap.svg.js');
 
 
 /* Controllers */
 var Map_for_walking = require('./maps/Map_for_walking.js');
-var _ = require('lodash');
-var Snap = require('./bower_components/snap.svg/dist/snap.svg.js');
+
 var shortest_path_of_two_given_locations = require('./methods/shortest_path_of_two_given_locations.js');
+var shortest_paths_from_every_other_location = require('./methods/shortest_paths_from_every_other_location.js');
+var shortest_paths_between_every_two_locations = require('./methods/shortest_paths_between_every_two_locations.js');
+
+
 var controllers = angular.module('controllers', []);
 
-function is_letter(str)
-{
-  if(/^[A-Z]+$/.test( str)) {
+function is_letter(str){
+  if(/^[A-Z]+$/.test(str) && str.length == 1) {
     return true;
   }
 else{
   return false;}
 }
+
+
+function are_legal(start, end){
+  if (typeof start == 'undefined'){
+    alert('请输入起点');
+    return false;
+  }else if (typeof end == 'undefined') {
+    alert('请输入终点');
+    return false;
+  } else if (_.isEmpty(_.trim(start))){
+    alert('请输入起点');
+  } else if (_.isEmpty(_.trim(end))) {
+    alert('请输入终点');
+    return false;
+  } else if(!is_letter(_.trim(start)) || !is_letter(_.trim(end))){
+    alert('起点和终点只能为大写字母');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function is_legal(end) {
+  if (typeof end == 'undefined') {
+    alert('请输入终点');
+    return false;
+  } else if (_.isEmpty(_.trim(end))) {
+    alert('请输入终点');
+    return false;
+  } else if(!is_letter(_.trim(end))){
+    alert('终点只能为大写字母');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+
 /*
 var G = new Graph();
 G.addVertex('hello');
@@ -24,10 +66,12 @@ G.addVertex('world');
 G.V[1].pi = G.V[0];
 var w = [][];*/
 controllers.controller('mapControl', ['$scope', function($scope) {
+  //初始化地图
   $scope.constMap = new Map_for_walking();
   $scope.orderProp = 'age';
   $scope.edges = [];
 
+  //初始化各位置点
   $scope.s = Snap('#map');
   $scope.circles = {};
   _.forOwn($scope.constMap.V, function(v){
@@ -40,47 +84,30 @@ controllers.controller('mapControl', ['$scope', function($scope) {
     });
   });
 
-
-
-
-
-
-
-
-
-
-  $scope.showPath = function(){
-    if(typeof $scope.startInput == 'undefined'){
-      alert('请输入起点');
-      return;
-    }else if(typeof $scope.endInput == 'undefined'){
-      alert('请输入终点');
-      return;
-    } else {
-      if(is_letter($scope.startInput) || is_letter($scope.endInput)) {
-        //$scope.path_str = 'test_str';
-        //console.log('test_debug');
-        //console.log(shortest_path_of_two_given_locations('A', 'B'));
-        //shortest_path_of_two_given_locations('A', 'B');
-        var list = shortest_path_of_two_given_locations($scope.startInput, $scope.endInput);
-        $scope.path_str = list.toString();
-        $scope.$broadcast('showPath',{list: list});
-      }else {
-        return;
-      }
-      }
+  $scope.show_shortest_path_of_two_locations = function(){
+    if (are_legal($scope.startInput, $scope.endInput)){
+      var list = shortest_path_of_two_given_locations($scope.startInput, $scope.endInput);
+      $scope.path_str = list.toString();
+      $scope.$broadcast('showPath',{list: list});
+    }
   };
 
-  /*
-  Map.success(function(data){
-    angular.forEach(data.split('\n'), function(line, index){
-      $scope.edges.push(line);
-    });
-  });
-  */
 
-  //$scope.dk = dk(G,);
-  //console.log(dk);
+  $scope.show_shortest_path_from_every_other_location = function(){
+    if(is_legal($scope.endInput)){
+      $scope.startInput = '';
+      var lists = shortest_paths_from_every_other_location($scope.endInput);
+      $scope.path_str = lists.toString();
+      $scope.$broadcast('showPath',{lists: lists});
+    }
+  };
+
+  $scope.show_shortest_paths_between_eery_two_locations = function(){
+    var lists = shortest_paths_between_every_two_locations();
+    $scope.path_str = lists.toString();
+    $scope.$broadcast('showPath', {list: lists});
+  };
+
 }]).
 directive('snapMap', function(){
   return {
@@ -114,6 +141,10 @@ directive('snapMap', function(){
           stroke: "#00FF00",
           strokeWidth: 10
         });
+
+      });
+
+      scope.$on('showPaths', function(event, data){
 
       });
 
