@@ -27,7 +27,28 @@ controllers.controller('mapControl', ['$scope', function($scope) {
   $scope.constMap = new Map_for_walking();
   $scope.orderProp = 'age';
   $scope.edges = [];
-  //$scope.path_str = 'nothing';
+
+  $scope.s = Snap('#map');
+  $scope.circles = {};
+  _.forOwn($scope.constMap.V, function(v){
+    $scope.circles[v.name] = $scope.s.circle(v.x, v.y, 20);
+    $scope.circles[v.name].attr({fill: "transparent"});
+    $scope.circles[v.name].dblclick(function(){
+      $scope.$apply(function(){
+        $scope.startInput = v.name;
+      });
+    });
+  });
+
+
+
+
+
+
+
+
+
+
   $scope.showPath = function(){
     if(typeof $scope.startInput == 'undefined'){
       alert('请输入起点');
@@ -64,13 +85,8 @@ controllers.controller('mapControl', ['$scope', function($scope) {
 directive('snapMap', function(){
   return {
     link: function(scope, element, attrs){
+/*
       var s = Snap(element[0]);
-      /*
-      var bigCircle = s.circle(71, 233, 20);
-
-      bigCircle.attr({
-        fill: "transparent"
-      });*/
       var circles = {};
       _.forOwn(scope.constMap.V, function(v){
         circles[v.name] = s.circle(v.x, v.y, 20);
@@ -84,17 +100,15 @@ directive('snapMap', function(){
           //alert(v.name);
         });
       });
+      */
 
       scope.$on('showPath', function(event, data){
-
-
         var point_arr = [];
         data.list.forEach(function(element){
-          point_arr.push(scope.constMap.V[element].x);
-          point_arr.push(scope.constMap.V[element].y);
+          point_arr.push(scope.constMap.V[element].x, scope.constMap.V[element].y);
         });
 
-        var p1 = s.polyline(point_arr);
+        var p1 = scope.s.polyline(point_arr);
         p1.attr({
           fill: "none",
           stroke: "#00FF00",
@@ -102,9 +116,6 @@ directive('snapMap', function(){
         });
 
       });
-
-
-
 
 
 
