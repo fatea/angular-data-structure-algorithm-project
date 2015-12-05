@@ -1,39 +1,51 @@
 "use strict";
+
+
+
+var _ = require('lodash');
+
+var Map = require('../maps/Map.js');
 var Dijkstra = require('./lib/Dijkstra.js');
-var Map = require('../maps/Map_for_walking.js');
+
 function shortest_paths_between_every_two_locations(way){
-  var map = Map();
 
 
-  Dijkstra(map, map.V[start]);
-  var path_list = [];
-
-  function print_path(){
 
 
-    var end_point = map.V[end];
-    path_list.unshift(end_point.name);
 
-    while (end_point.pi != null){
-      end_point = end_point.pi;
+
+  //TODO: 对所有点做Dijkstra
+  var maps = {};
+
+  _.times(26, function(n){
+    var current_letter = String.fromCharCode(65+n);
+      var map = Map(way);
+      Dijkstra(map,  map.V[current_letter]);
+      maps[current_letter] = map;
+  });
+
+  var path_lists = [];
+  function get_paths(){
+    _.forOwn(maps, function(map, name){
+      //console.log(name);
+      var path_list = [];
+      var end_point = map.V[end];
       path_list.unshift(end_point.name);
-    }
 
-    /*
-     path_list.forEach(function(name){
-     console.log(name);
-     });
-     */
+      while (end_point.pi != null){
+        end_point = end_point.pi;
+        path_list.unshift(end_point.name);
+      }
+
+      path_lists.push(path_list);
+    });
   }
+  get_paths();
 
-
-  print_path();
-  return path_list;
-
+  return path_lists;
 }
 
-//var sth = shortest_path_of_two_given_locations('A', 'N');
-//console.log('end');
-
+//var lists = shortest_paths_between_every_two_locations(2);
+//console.log('finish');
 
 module.exports = shortest_paths_between_every_two_locations;

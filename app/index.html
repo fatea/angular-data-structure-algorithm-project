@@ -62,19 +62,35 @@
     <div class="panel inputBox input end">
       <span>终点: </span><input type="text" ng-model="endInput">
     </div>
+
+
     <ul>
       <li>
-        <button id="walkingButton" ng-click="show_shortest_path_of_two_locations()">我要步行</button>
+        <button id="walkingButton"  ng-click="way=1">我要步行</button>
       </li>
       <li>
-        <button id="drivingButton" ng-click="show_shortest_path_from_every_other_location()">我要开车</button>
+        <button id="drivingButton" ng-click="way=2">我要开车</button>
       </li>
       <li>
-        <button id="busButton">公交优先</button>
+        <button id="busButton"    ng-click="way=3">公交优先</button>
       </li>
     </ul>
 
-    <button id="resetButton">重置</button>
+    <ul>
+      <li>
+        <button id="twoGivenLocationsButton" ng-click="show_shortest_path_of_two_given_locations()">选定两点最短路径</button>
+      </li>
+      <li>
+        <button id="everyOtherLocationsButton" ng-click="show_shortest_paths_from_every_other_location()">所有点到终点最短路径</button>
+      </li>
+      <li>
+        <button id="everyTwoLocationsButton" ng-click="show_shortest_paths_between_every_two_locations()">所有两点间最短路径</button>
+      </li>
+    </ul>
+
+
+
+    <button id="resetButton" ng-click="reset()">重置</button>
   </div>
   <div class="panel outputBox">
     <textArea>{{path_str}}</textArea>

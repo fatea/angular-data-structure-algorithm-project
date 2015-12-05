@@ -76,6 +76,7 @@ controllers.controller('mapControl', ['$scope', function($scope) {
   $scope.constMap = new Map_for_drawing_locations();
   $scope.orderProp = 'age';
   $scope.edges = [];
+  $scope.way = 0;//默认步行
 
   //初始化各位置点
   $scope.s = Snap('#map');
@@ -90,26 +91,38 @@ controllers.controller('mapControl', ['$scope', function($scope) {
     });
   });
 
-  $scope.show_shortest_path_of_two_locations = function(){
+  $scope.show_shortest_path_of_two_given_locations = function(){
     if (are_legal($scope.startInput, $scope.endInput)){
-      var list = shortest_path_of_two_given_locations(3, $scope.startInput, $scope.endInput);
+      if($scope.way == 0){
+        alert('请选择显示路径的方式');
+        return;
+      }
+      var list = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
       $scope.path_str = list.toString();
       $scope.$broadcast('showPath',{list: list});
     }
   };
 
 
-  $scope.show_shortest_path_from_every_other_location = function(){
+  $scope.show_shortest_paths_from_every_other_location = function(){
     if(is_legal($scope.endInput)){
+      if($scope.way == 0){
+        alert('请选择显示路径的方式');
+        return;
+      }
       $scope.startInput = '';
-      var lists = shortest_paths_from_every_other_location(3, $scope.endInput);
+      var lists = shortest_paths_from_every_other_location($scope.way, $scope.endInput);
       $scope.path_str = lists.toString();
       $scope.$broadcast('showPaths',{lists: lists});
     }
   };
 
-  $scope.show_shortest_paths_between_eery_two_locations = function(){
-    var lists = shortest_paths_between_every_two_locations(3);
+  $scope.show_shortest_paths_between_every_two_locations = function(){
+    if($scope.way == 0){
+      alert('请选择显示路径的方式');
+      return;
+    }
+    var lists = shortest_paths_between_every_two_locations($scope.way);
     $scope.path_str = lists.toString();
     $scope.$broadcast('showPaths', {list: lists});
   };
@@ -164,11 +177,15 @@ directive('snapMap', function(){
           point_arrs.push(point_arr);
         });
 
-        point_arrs.forEach(function(point_arr){
+
+        var color_arr =['#FF6666','#3366FF','#663333','#99FF99'];
+
+
+        point_arrs.forEach(function(point_arr, index){
           var polyline = scope.s.polyline(point_arr);
           polyline.attr({
             fill: "none",
-            stroke: "#00FF00",
+            stroke: color_arr[index%(color_arr.length)],
             strokeWidth: 10
           });
 

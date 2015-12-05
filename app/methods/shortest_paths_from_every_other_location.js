@@ -1,11 +1,11 @@
 "use strict";
 var Dijkstra = require('./lib/Dijkstra.js');
-var Map = require('../maps/Map_for_walking.js');
+var Map = require('../maps/Map.js');
 
 var _ = require('lodash');
 
 function shortest_paths_from_every_other_location(way, end){
-  var map = Map();
+
 
   //TODO: 对所有点做Dijkstra
   var maps = {};
@@ -13,7 +13,7 @@ function shortest_paths_from_every_other_location(way, end){
   _.times(26, function(n){
     var current_letter = String.fromCharCode(65+n);
     if(current_letter != end){
-      var map = Map();
+      var map = Map(way);
       Dijkstra(map,  map.V[current_letter]);
       maps[current_letter] = map;
     }

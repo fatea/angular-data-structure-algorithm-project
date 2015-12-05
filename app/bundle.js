@@ -43924,8 +43924,8 @@
 
 	var phonecatAnimations = __webpack_require__(7);
 	var controllers = __webpack_require__(8);
-	var phonecatFilters = __webpack_require__(22);
-	var phonecatServices = __webpack_require__(23);
+	var phonecatFilters = __webpack_require__(25);
+	var phonecatServices = __webpack_require__(26);
 
 	//console.log('shiyixiaaaaaa');
 
@@ -44054,8 +44054,8 @@
 	*/
 
 	var shortest_path_of_two_given_locations = __webpack_require__(15);
-	var shortest_paths_from_every_other_location = __webpack_require__(20);
-	var shortest_paths_between_every_two_locations = __webpack_require__(21);
+	var shortest_paths_from_every_other_location = __webpack_require__(23);
+	var shortest_paths_between_every_two_locations = __webpack_require__(24);
 
 
 	var controllers = angular.module('controllers', []);
@@ -44116,6 +44116,7 @@
 	  $scope.constMap = new Map_for_drawing_locations();
 	  $scope.orderProp = 'age';
 	  $scope.edges = [];
+	  $scope.way = 0;//默认步行
 
 	  //初始化各位置点
 	  $scope.s = Snap('#map');
@@ -44130,26 +44131,38 @@
 	    });
 	  });
 
-	  $scope.show_shortest_path_of_two_locations = function(){
+	  $scope.show_shortest_path_of_two_given_locations = function(){
 	    if (are_legal($scope.startInput, $scope.endInput)){
-	      var list = shortest_path_of_two_given_locations(3, $scope.startInput, $scope.endInput);
+	      if($scope.way == 0){
+	        alert('请选择显示路径的方式');
+	        return;
+	      }
+	      var list = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
 	      $scope.path_str = list.toString();
 	      $scope.$broadcast('showPath',{list: list});
 	    }
 	  };
 
 
-	  $scope.show_shortest_path_from_every_other_location = function(){
+	  $scope.show_shortest_paths_from_every_other_location = function(){
 	    if(is_legal($scope.endInput)){
+	      if($scope.way == 0){
+	        alert('请选择显示路径的方式');
+	        return;
+	      }
 	      $scope.startInput = '';
-	      var lists = shortest_paths_from_every_other_location(3, $scope.endInput);
+	      var lists = shortest_paths_from_every_other_location($scope.way, $scope.endInput);
 	      $scope.path_str = lists.toString();
 	      $scope.$broadcast('showPaths',{lists: lists});
 	    }
 	  };
 
-	  $scope.show_shortest_paths_between_eery_two_locations = function(){
-	    var lists = shortest_paths_between_every_two_locations(3);
+	  $scope.show_shortest_paths_between_every_two_locations = function(){
+	    if($scope.way == 0){
+	      alert('请选择显示路径的方式');
+	      return;
+	    }
+	    var lists = shortest_paths_between_every_two_locations($scope.way);
 	    $scope.path_str = lists.toString();
 	    $scope.$broadcast('showPaths', {list: lists});
 	  };
@@ -44204,11 +44217,15 @@
 	          point_arrs.push(point_arr);
 	        });
 
-	        point_arrs.forEach(function(point_arr){
+
+	        var color_arr =['#FF6666','#3366FF','#663333','#99FF99'];
+
+
+	        point_arrs.forEach(function(point_arr, index){
 	          var polyline = scope.s.polyline(point_arr);
 	          polyline.attr({
 	            fill: "none",
-	            stroke: "#00FF00",
+	            stroke: color_arr[index%(color_arr.length)],
 	            strokeWidth: 10
 	          });
 
@@ -64908,7 +64925,7 @@
 	var Map = __webpack_require__(18);
 	//var test_map = require('../maps/test_map.js');
 	function shortest_path_of_two_given_locations(way, start, end){
-	  var map = Map();
+	  var map = Map(way);
 
 
 	  Dijkstra(map, map.V[start]);
@@ -65228,9 +65245,38 @@
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	var Map_for_walking = __webpack_require__(19);
+	var Map_for_driving = __webpack_require__(21);
+	var Map_for_bus = __webpack_require__(22);
+
+	const walking = 1;
+	const driving = 2;
+	const bus = 3;
+
+
+	function Map(way){
+	  var map;
+	    if(way == walking){
+	      map = Map_for_walking();
+	    } else if(way == driving){
+	      map = Map_for_driving();
+	    } else {
+	      map = Map_for_bus();
+	    }
+	  return map;
+	}
+
+	module.exports = Map;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var Graph = __webpack_require__(13);
 	var Vertex = __webpack_require__(14);
-	var Edge = __webpack_require__(19);
+	var Edge = __webpack_require__(20);
 
 	function Map() {
 	  var map = new Graph();
@@ -65337,7 +65383,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65409,7 +65455,226 @@
 	module.exports = Edge;
 
 /***/ },
-/* 20 */
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Graph = __webpack_require__(13);
+	var Vertex = __webpack_require__(14);
+	var Edge = __webpack_require__(20);
+
+	function Map() {
+	  var map = new Graph();
+	//map.addVertex(new Vertex("A"));
+	  /*
+	   for (var i = 0; i < 26; i++) {
+	   map.addVertex(new Vertex(String.fromCharCode(65 + i)));
+	   }
+	   */
+
+	  map.addVertex(new Vertex('A', 71, 233));
+	  map.addVertex(new Vertex('B',125, 472));
+	  map.addVertex(new Vertex('C',146, 593));
+	  map.addVertex(new Vertex('D',240, 164));
+	  map.addVertex(new Vertex('E',272, 237));
+	  map.addVertex(new Vertex('F',272, 323));
+	  map.addVertex(new Vertex('G',284, 421));
+	  map.addVertex(new Vertex('H',294, 563));
+	  map.addVertex(new Vertex('I',407, 76));
+	  map.addVertex(new Vertex('J',422, 212));
+	  map.addVertex(new Vertex('K',429, 296));
+	  map.addVertex(new Vertex('L',437, 397));
+	  map.addVertex(new Vertex('M',442, 463));
+	  map.addVertex(new Vertex('N',542, 44));
+	  map.addVertex(new Vertex('O',577, 148));
+	  map.addVertex(new Vertex('P',599, 243));
+	  map.addVertex(new Vertex('Q',657, 312));
+	  map.addVertex(new Vertex('R',595, 396));
+	  map.addVertex(new Vertex('S',720, 376));
+	  map.addVertex(new Vertex('T',671, 192));
+	  map.addVertex(new Vertex('U',768, 109));
+	  map.addVertex(new Vertex('V',875, 24));
+	  map.addVertex(new Vertex('W',952, 101));
+	  map.addVertex(new Vertex('X',878, 109));
+	  map.addVertex(new Vertex('Y',900, 313));
+	  map.addVertex(new Vertex('Z',776, 354));
+
+
+
+
+
+
+	  const auto = 1;
+	  const walk = 2;
+	  const both = 3;
+
+	  const one_way = 1;
+	  const two_way = 2;
+	  /*
+	   map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, false));
+	   map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	   map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, false));
+	   */
+
+	  map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, two_way));
+	  map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	  map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, two_way));
+
+	  map.addEdge(new Edge(map, 'B', 'G', 1.12, both, two_way));
+	  map.addEdge(new Edge(map, 'C', 'H', 1.03, both, two_way));
+	  map.addEdge(new Edge(map, 'D', 'E', 0.51, both, two_way));
+	  map.addEdge(new Edge(map, 'D', 'I', 1.32, both, two_way));
+	  map.addEdge(new Edge(map, 'E', 'F', 0.68, both, two_way));
+	  map.addEdge(new Edge(map, 'F', 'G', 0.74, both, two_way));
+	  map.addEdge(new Edge(map, 'F', 'K', 1.14, both, two_way));
+	  map.addEdge(new Edge(map, 'G', 'H', 0.97, both, two_way));
+	  map.addEdge(new Edge(map, 'G', 'L', 1.01, both, two_way));
+	  map.addEdge(new Edge(map, 'H', 'M', 0.94, both, two_way));
+	  map.addEdge(new Edge(map, 'I', 'J', 0.95, both, two_way));
+	  map.addEdge(new Edge(map, 'I', 'N', 0.90, both, two_way));
+	  map.addEdge(new Edge(map, 'J', 'K', 0.62, both, two_way));
+	  map.addEdge(new Edge(map, 'K', 'L', 0.66, both, two_way));
+	  map.addEdge(new Edge(map, 'K', 'P', 1.33, both, two_way));
+	  map.addEdge(new Edge(map, 'L', 'M', 0.92, both, two_way));
+	  map.addEdge(new Edge(map, 'L', 'R', 1.10, both, two_way));
+	  map.addEdge(new Edge(map, 'N', 'O', 0.83, both, two_way));
+	  map.addEdge(new Edge(map, 'O', 'P', 0.55, both, two_way));
+	  map.addEdge(new Edge(map, 'O', 'U', 1.30, both, two_way));
+	  //map.addEdge(new Edge(map, 'P', 'Q', 0.62, both, two_way));
+	  //map.addEdge(new Edge(map, 'P', 'T', 0.62, both, two_way));
+	  //map.addEdge(new Edge(map, 'Q', 'R', 0.73, both, two_way));
+	  //map.addEdge(new Edge(map, 'Q', 'S', 0.51, both, two_way));
+	  //map.addEdge(new Edge(map, 'Q', 'T', 0.93, both, two_way));
+	  map.addEdge(new Edge(map, 'R', 'S', 0.87, both, two_way));
+	  map.addEdge(new Edge(map, 'S', 'Z', 0.38, both, two_way));
+	  map.addEdge(new Edge(map, 'T', 'U', 1.12, both, two_way));
+	  map.addEdge(new Edge(map, 'T', 'Z', 1.89, both, two_way));
+
+	  map.addEdge(new Edge(map, 'U', 'V', 0.99, both, one_way));
+
+	  map.addEdge(new Edge(map, 'X', 'U', 0.65, both, one_way));
+
+	  map.addEdge(new Edge(map, 'U', 'Z', 1.70, both, two_way));
+	  map.addEdge(new Edge(map, 'V', 'X', 0.58, both, two_way));
+
+	  map.addEdge(new Edge(map, 'V', 'W', 1.10, both, one_way));
+
+	  map.addEdge(new Edge(map, 'W', 'X', 0.57, both, one_way));
+
+	  map.addEdge(new Edge(map, 'X', 'Y', 1.40, both, two_way));
+	  map.addEdge(new Edge(map, 'Y', 'Z', 0.97, both, two_way));
+
+
+
+	  return map;
+	}
+	module.exports = Map;
+
+	//console.log('test');
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Graph = __webpack_require__(13);
+	var Vertex = __webpack_require__(14);
+	var Edge = __webpack_require__(20);
+
+	function Map() {
+	  var map = new Graph();
+	//map.addVertex(new Vertex("A"));
+	  /*
+	   for (var i = 0; i < 26; i++) {
+	   map.addVertex(new Vertex(String.fromCharCode(65 + i)));
+	   }
+	   */
+
+	  map.addVertex(new Vertex('A', 71, 233));
+	  map.addVertex(new Vertex('B',125, 472));
+	  map.addVertex(new Vertex('C',146, 593));
+	  map.addVertex(new Vertex('D',240, 164));
+	  map.addVertex(new Vertex('E',272, 237));
+	  map.addVertex(new Vertex('F',272, 323));
+	  map.addVertex(new Vertex('G',284, 421));
+	  map.addVertex(new Vertex('H',294, 563));
+	  map.addVertex(new Vertex('I',407, 76));
+	  map.addVertex(new Vertex('J',422, 212));
+	  map.addVertex(new Vertex('K',429, 296));
+	  map.addVertex(new Vertex('L',437, 397));
+	  map.addVertex(new Vertex('M',442, 463));
+	  map.addVertex(new Vertex('N',542, 44));
+	  map.addVertex(new Vertex('O',577, 148));
+	  map.addVertex(new Vertex('P',599, 243));
+	  map.addVertex(new Vertex('Q',657, 312));
+	  map.addVertex(new Vertex('R',595, 396));
+	  map.addVertex(new Vertex('S',720, 376));
+	  map.addVertex(new Vertex('T',671, 192));
+	  map.addVertex(new Vertex('U',768, 109));
+	  map.addVertex(new Vertex('V',875, 24));
+	  map.addVertex(new Vertex('W',952, 101));
+	  map.addVertex(new Vertex('X',878, 109));
+	  map.addVertex(new Vertex('Y',900, 313));
+	  map.addVertex(new Vertex('Z',776, 354));
+
+
+
+
+
+
+	  const auto = 1;
+	  const walk = 2;
+
+
+	  map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, false));
+	  map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	  map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, false));
+	  map.addEdge(new Edge(map, 'B', 'G', 1.12));
+	  map.addEdge(new Edge(map, 'C', 'H', 1.03));
+	  map.addEdge(new Edge(map, 'D', 'E', 0.51));
+	  map.addEdge(new Edge(map, 'D', 'I', 1.32));
+	  map.addEdge(new Edge(map, 'E', 'F', 0.68));
+	  map.addEdge(new Edge(map, 'F', 'G', 0.74));
+	  map.addEdge(new Edge(map, 'F', 'K', 1.14));
+	  map.addEdge(new Edge(map, 'G', 'H', 0.97));
+	  map.addEdge(new Edge(map, 'G', 'L', 1.01));
+	  map.addEdge(new Edge(map, 'H', 'M', 0.94));
+	  map.addEdge(new Edge(map, 'I', 'J', 0.95));
+	  map.addEdge(new Edge(map, 'I', 'N', 0.90));
+	  map.addEdge(new Edge(map, 'J', 'K', 0.62));
+	  map.addEdge(new Edge(map, 'K', 'L', 0.66));
+	  map.addEdge(new Edge(map, 'K', 'P', 1.33));
+	  map.addEdge(new Edge(map, 'L', 'M', 0.92));
+	  map.addEdge(new Edge(map, 'L', 'R', 1.10));
+	  map.addEdge(new Edge(map, 'N', 'O', 0.83));
+	  map.addEdge(new Edge(map, 'O', 'P', 0.55));
+	  map.addEdge(new Edge(map, 'O', 'U', 1.30));
+	  map.addEdge(new Edge(map, 'P', 'Q', 0.62, walk, false));
+	  map.addEdge(new Edge(map, 'P', 'T', 0.62, walk, false));
+	  map.addEdge(new Edge(map, 'Q', 'R', 0.73, walk, false));
+	  map.addEdge(new Edge(map, 'Q', 'S', 0.51, walk, false));
+	  map.addEdge(new Edge(map, 'Q', 'T', 0.93, walk, false));
+	  map.addEdge(new Edge(map, 'R', 'S', 0.87));
+	  map.addEdge(new Edge(map, 'S', 'Z', 0.38));
+	  map.addEdge(new Edge(map, 'T', 'U', 1.12));
+	  map.addEdge(new Edge(map, 'T', 'Z', 1.89));
+	  map.addEdge(new Edge(map, 'U', 'V', 0.99, false, true));
+	  map.addEdge(new Edge(map, 'X', 'U', 0.65, false, true));
+	  map.addEdge(new Edge(map, 'U', 'Z', 1.70));
+	  map.addEdge(new Edge(map, 'V', 'X', 0.58));
+	  map.addEdge(new Edge(map, 'V', 'W', 1.10, false, true));
+	  map.addEdge(new Edge(map, 'W', 'X', 0.57, false, true));
+	  map.addEdge(new Edge(map, 'X', 'Y', 1.40));
+	  map.addEdge(new Edge(map, 'Y', 'Z', 0.97));
+
+	  return map;
+	}
+	module.exports = Map;
+
+	//console.log('test');
+
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -65419,7 +65684,7 @@
 	var _ = __webpack_require__(9);
 
 	function shortest_paths_from_every_other_location(way, end){
-	  var map = Map();
+
 
 	  //TODO: 对所有点做Dijkstra
 	  var maps = {};
@@ -65427,7 +65692,7 @@
 	  _.times(26, function(n){
 	    var current_letter = String.fromCharCode(65+n);
 	    if(current_letter != end){
-	      var map = Map();
+	      var map = Map(way);
 	      Dijkstra(map,  map.V[current_letter]);
 	      maps[current_letter] = map;
 	    }
@@ -65460,51 +65725,63 @@
 	module.exports = shortest_paths_from_every_other_location;
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Dijkstra = __webpack_require__(16);
+
+
+
+	var _ = __webpack_require__(9);
+
 	var Map = __webpack_require__(18);
+	var Dijkstra = __webpack_require__(16);
+
 	function shortest_paths_between_every_two_locations(way){
-	  var map = Map();
 
 
-	  Dijkstra(map, map.V[start]);
-	  var path_list = [];
-
-	  function print_path(){
 
 
-	    var end_point = map.V[end];
-	    path_list.unshift(end_point.name);
 
-	    while (end_point.pi != null){
-	      end_point = end_point.pi;
+
+	  //TODO: 对所有点做Dijkstra
+	  var maps = {};
+
+	  _.times(26, function(n){
+	    var current_letter = String.fromCharCode(65+n);
+	      var map = Map(way);
+	      Dijkstra(map,  map.V[current_letter]);
+	      maps[current_letter] = map;
+	  });
+
+	  var path_lists = [];
+	  function get_paths(){
+	    _.forOwn(maps, function(map, name){
+	      //console.log(name);
+	      var path_list = [];
+	      var end_point = map.V[end];
 	      path_list.unshift(end_point.name);
-	    }
 
-	    /*
-	     path_list.forEach(function(name){
-	     console.log(name);
-	     });
-	     */
+	      while (end_point.pi != null){
+	        end_point = end_point.pi;
+	        path_list.unshift(end_point.name);
+	      }
+
+	      path_lists.push(path_list);
+	    });
 	  }
+	  get_paths();
 
-
-	  print_path();
-	  return path_list;
-
+	  return path_lists;
 	}
 
-	//var sth = shortest_path_of_two_given_locations('A', 'N');
-	//console.log('end');
-
+	//var lists = shortest_paths_between_every_two_locations(2);
+	//console.log('finish');
 
 	module.exports = shortest_paths_between_every_two_locations;
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -65517,7 +65794,7 @@
 	);
 
 /***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports) {
 
 	
