@@ -5,7 +5,13 @@ var Snap = require('./bower_components/snap.svg/dist/snap.svg.js');
 
 
 /* Controllers */
+var Map_for_drawing_locations = require('./maps/Map_for_drawing_locations.js');
+
+/*
 var Map_for_walking = require('./maps/Map_for_walking.js');
+var Map_for_driving = require('./maps/Map_for_driving.js');
+var Map_for_bus     = require('./maps/Map_for_bus.js');
+*/
 
 var shortest_path_of_two_given_locations = require('./methods/shortest_path_of_two_given_locations.js');
 var shortest_paths_from_every_other_location = require('./methods/shortest_paths_from_every_other_location.js');
@@ -67,7 +73,7 @@ G.V[1].pi = G.V[0];
 var w = [][];*/
 controllers.controller('mapControl', ['$scope', function($scope) {
   //初始化地图
-  $scope.constMap = new Map_for_walking();
+  $scope.constMap = new Map_for_drawing_locations();
   $scope.orderProp = 'age';
   $scope.edges = [];
 
@@ -86,7 +92,7 @@ controllers.controller('mapControl', ['$scope', function($scope) {
 
   $scope.show_shortest_path_of_two_locations = function(){
     if (are_legal($scope.startInput, $scope.endInput)){
-      var list = shortest_path_of_two_given_locations($scope.startInput, $scope.endInput);
+      var list = shortest_path_of_two_given_locations(3, $scope.startInput, $scope.endInput);
       $scope.path_str = list.toString();
       $scope.$broadcast('showPath',{list: list});
     }
@@ -96,16 +102,16 @@ controllers.controller('mapControl', ['$scope', function($scope) {
   $scope.show_shortest_path_from_every_other_location = function(){
     if(is_legal($scope.endInput)){
       $scope.startInput = '';
-      var lists = shortest_paths_from_every_other_location($scope.endInput);
+      var lists = shortest_paths_from_every_other_location(3, $scope.endInput);
       $scope.path_str = lists.toString();
-      $scope.$broadcast('showPath',{lists: lists});
+      $scope.$broadcast('showPaths',{lists: lists});
     }
   };
 
   $scope.show_shortest_paths_between_eery_two_locations = function(){
-    var lists = shortest_paths_between_every_two_locations();
+    var lists = shortest_paths_between_every_two_locations(3);
     $scope.path_str = lists.toString();
-    $scope.$broadcast('showPath', {list: lists});
+    $scope.$broadcast('showPaths', {list: lists});
   };
 
 }]).
@@ -145,6 +151,28 @@ directive('snapMap', function(){
       });
 
       scope.$on('showPaths', function(event, data){
+        data.lists.forEach(function(list){
+          console.log(list.toString());
+        });
+
+        var point_arrs = [];
+        data.lists.forEach(function(list){
+          var point_arr = [];
+          list.forEach(function(element){
+            point_arr.push(scope.constMap.V[element].x, scope.constMap.V[element].y);
+          });
+          point_arrs.push(point_arr);
+        });
+
+        point_arrs.forEach(function(point_arr){
+          var polyline = scope.s.polyline(point_arr);
+          polyline.attr({
+            fill: "none",
+            stroke: "#00FF00",
+            strokeWidth: 10
+          });
+
+        });
 
       });
 

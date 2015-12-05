@@ -22,7 +22,7 @@ function dijkstra(G, s) {
     S = _.union(S, [u]);
     u.adj.forEach(
       function(v){
-        relax(u, v, G);
+        relax(Q, u, v, G);
       }
     )
   }
@@ -32,7 +32,8 @@ function dijkstra(G, s) {
 function initialize_single_source(G, s){
   _.forOwn(G.V, function(v, key){
     //console.log(key);
-    v.d = Number.MAX_VALUE;
+    v.d = Infinity;
+    //v.d = Number.MAX_VALUE;
     v.pi = null;
 
   });
@@ -45,14 +46,27 @@ function initialize_single_source(G, s){
   s.d = 0;
 }
 
-function relax(u, v, G){
-  try{
+//function relax(u, v, G){
+//  try{
+//  if (v.d > u.d + G.w(u, v)){
+//    var sth = G.w(u, v);
+//    v.d = u.d + G.w(u, v);
+//    v.pi = u;
+//  }
+//
+//  }
+//  catch (error){
+//    console.log(error.message);
+//  }
+//}
+
+
+function relax(heap, u, v, G){
   if (v.d > u.d + G.w(u, v)){
+    var sth = G.w(u, v);
     v.d = u.d + G.w(u, v);
     v.pi = u;
-  }}
-  catch (error){
-    console.log(error.message);
+    heap.update(v);
   }
 }
 

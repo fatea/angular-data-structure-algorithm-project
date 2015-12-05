@@ -1,7 +1,7 @@
 "use strict";
 var Dijkstra = require('./lib/Dijkstra.js');
 var Map = require('../maps/Map_for_walking.js');
-function shortest_paths_between_every_two_locations(start, end){
+function shortest_paths_between_every_two_locations(way){
   var map = Map();
 
 
