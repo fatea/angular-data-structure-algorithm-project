@@ -44164,7 +44164,7 @@
 	    }
 	    var lists = shortest_paths_between_every_two_locations($scope.way);
 	    $scope.path_str = lists.toString();
-	    $scope.$broadcast('showPaths', {list: lists});
+	    $scope.$broadcast('showPaths', {lists: lists});
 	  };
 
 	}]).
@@ -65332,7 +65332,7 @@
 	  */
 
 	  //map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, two_way));
-	  map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	  map.addEdge(new Edge(map, 'A', 'D', 1.20, both, two_way));
 	  //map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, two_way));
 
 	  map.addEdge(new Edge(map, 'B', 'G', 1.12, both, two_way));
@@ -65516,7 +65516,7 @@
 	   */
 
 	  map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, two_way));
-	  map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	  map.addEdge(new Edge(map, 'A', 'D', 1.20, both, two_way));
 	  map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, two_way));
 
 	  map.addEdge(new Edge(map, 'B', 'G', 1.12, both, two_way));
@@ -65623,48 +65623,86 @@
 
 	  const auto = 1;
 	  const walk = 2;
+	  const both = 3;
+
+	  const one_way = 1;
+	  const two_way = 2;
+
+	  const walking_speed = 0.07;
+
+	  /*
+	   map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, false));
+	   map.addEdge(new Edge(map, 'A', 'D', 1.20));
+	   map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, false));
+	   */
 
 
-	  map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, false));
-	  map.addEdge(new Edge(map, 'A', 'D', 1.20));
-	  map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, false));
-	  map.addEdge(new Edge(map, 'B', 'G', 1.12));
-	  map.addEdge(new Edge(map, 'C', 'H', 1.03));
-	  map.addEdge(new Edge(map, 'D', 'E', 0.51));
-	  map.addEdge(new Edge(map, 'D', 'I', 1.32));
-	  map.addEdge(new Edge(map, 'E', 'F', 0.68));
-	  map.addEdge(new Edge(map, 'F', 'G', 0.74));
-	  map.addEdge(new Edge(map, 'F', 'K', 1.14));
-	  map.addEdge(new Edge(map, 'G', 'H', 0.97));
-	  map.addEdge(new Edge(map, 'G', 'L', 1.01));
-	  map.addEdge(new Edge(map, 'H', 'M', 0.94));
-	  map.addEdge(new Edge(map, 'I', 'J', 0.95));
-	  map.addEdge(new Edge(map, 'I', 'N', 0.90));
-	  map.addEdge(new Edge(map, 'J', 'K', 0.62));
-	  map.addEdge(new Edge(map, 'K', 'L', 0.66));
-	  map.addEdge(new Edge(map, 'K', 'P', 1.33));
-	  map.addEdge(new Edge(map, 'L', 'M', 0.92));
-	  map.addEdge(new Edge(map, 'L', 'R', 1.10));
-	  map.addEdge(new Edge(map, 'N', 'O', 0.83));
-	  map.addEdge(new Edge(map, 'O', 'P', 0.55));
-	  map.addEdge(new Edge(map, 'O', 'U', 1.30));
-	  map.addEdge(new Edge(map, 'P', 'Q', 0.62, walk, false));
-	  map.addEdge(new Edge(map, 'P', 'T', 0.62, walk, false));
-	  map.addEdge(new Edge(map, 'Q', 'R', 0.73, walk, false));
-	  map.addEdge(new Edge(map, 'Q', 'S', 0.51, walk, false));
-	  map.addEdge(new Edge(map, 'Q', 'T', 0.93, walk, false));
-	  map.addEdge(new Edge(map, 'R', 'S', 0.87));
-	  map.addEdge(new Edge(map, 'S', 'Z', 0.38));
-	  map.addEdge(new Edge(map, 'T', 'U', 1.12));
-	  map.addEdge(new Edge(map, 'T', 'Z', 1.89));
-	  map.addEdge(new Edge(map, 'U', 'V', 0.99, false, true));
-	  map.addEdge(new Edge(map, 'X', 'U', 0.65, false, true));
-	  map.addEdge(new Edge(map, 'U', 'Z', 1.70));
-	  map.addEdge(new Edge(map, 'V', 'X', 0.58));
-	  map.addEdge(new Edge(map, 'V', 'W', 1.10, false, true));
-	  map.addEdge(new Edge(map, 'W', 'X', 0.57, false, true));
-	  map.addEdge(new Edge(map, 'X', 'Y', 1.40));
-	  map.addEdge(new Edge(map, 'Y', 'Z', 0.97));
+	  //对于公交的地图: 原来的距离 km 替换成了 时间 min
+
+	  //map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, two_way));
+	  map.addEdge(new Edge(map, 'A', 'D', 1.20/walking_speed, both, one_way));
+	  //map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, two_way));
+
+	  map.addEdge(new Edge(map, 'B', 'G', 2, both, two_way));//busline
+
+
+	  map.addEdge(new Edge(map, 'C', 'H', 1.03/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'D', 'E', 0.51/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'D', 'I', 1.32/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'E', 'F', 0.68/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'F', 'G', 0.74/walking_speed, both, two_way));
+
+	  map.addEdge(new Edge(map, 'F', 'K', 4, both, two_way));//busline
+
+	  map.addEdge(new Edge(map, 'G', 'H', 0.97/walking_speed, both, two_way));
+
+
+	  map.addEdge(new Edge(map, 'G', 'L', 3, both, two_way));//busline
+
+
+	  map.addEdge(new Edge(map, 'H', 'M', 0.94/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'I', 'J', 0.95/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'I', 'N', 0.90/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'J', 'K', 0.62/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'K', 'L', 0.66/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'K', 'P', 1.33/walking_speed, both, two_way));
+
+	  map.addEdge(new Edge(map, 'K', 'T', 5, both, two_way));//busline
+
+
+	  map.addEdge(new Edge(map, 'L', 'M', 0.92/walking_speed, both, two_way));
+
+
+	  map.addEdge(new Edge(map, 'L', 'R', 2, both, two_way));//busline
+
+
+	  map.addEdge(new Edge(map, 'N', 'O', 0.83/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'O', 'P', 0.55/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'O', 'U', 1.30/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'P', 'Q', 0.62/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'P', 'T', 0.62/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'Q', 'R', 0.73/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'Q', 'S', 0.51/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'Q', 'T', 0.93/walking_speed, both, two_way));
+
+	  map.addEdge(new Edge(map, 'R', 'Z', 2, both, two_way));//busline
+
+	  map.addEdge(new Edge(map, 'R', 'S', 0.87/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'S', 'Z', 0.38/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'T', 'U', 1.12/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'T', 'Z', 1.89/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'U', 'V', 0.99/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'X', 'U', 0.65/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'U', 'Z', 1.70/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'V', 'X', 0.58/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'V', 'W', 1.10/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'W', 'X', 0.57/walking_speed, both, two_way));
+	  map.addEdge(new Edge(map, 'X', 'Y', 1.40/walking_speed, both, two_way));
+
+
+	  map.addEdge(new Edge(map, 'Y', 'Z', 1, both, two_way));//busline
+
+
 
 	  return map;
 	}
@@ -65754,21 +65792,39 @@
 	      maps[current_letter] = map;
 	  });
 
+	  //现在有了26张地图,每张地图的起点都是当前的字母
+	  //接下来,对每张地图,计算当前起点到所有其他顶点的路径
+
 	  var path_lists = [];
 	  function get_paths(){
 	    _.forOwn(maps, function(map, name){
+	      _.times(26, function(n){
+
+	        var current_letter = String.fromCharCode(65+n);
+
+	        if(current_letter != name){
+	          //自己到自己的就不连线
+	          var path_list = [];
+	          var end_point = map.V[current_letter];
+	          path_list.unshift(end_point.name);
+
+	          while (end_point.pi != null){
+	            end_point = end_point.pi;
+	            path_list.unshift(end_point.name);
+	          }
+
+	          path_lists.push(path_list);
+	        }
+
+	      });
+
 	      //console.log(name);
-	      var path_list = [];
-	      var end_point = map.V[end];
-	      path_list.unshift(end_point.name);
 
-	      while (end_point.pi != null){
-	        end_point = end_point.pi;
-	        path_list.unshift(end_point.name);
-	      }
-
-	      path_lists.push(path_list);
 	    });
+
+
+
+
 	  }
 	  get_paths();
 

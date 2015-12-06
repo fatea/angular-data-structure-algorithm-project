@@ -56,7 +56,7 @@ function Map() {
    */
 
   map.addEdge(new Edge(map, 'A', 'B', 1.70, auto, two_way));
-  map.addEdge(new Edge(map, 'A', 'D', 1.20));
+  map.addEdge(new Edge(map, 'A', 'D', 1.20, both, two_way));
   map.addEdge(new Edge(map, 'B', 'C', 0.81, auto, two_way));
 
   map.addEdge(new Edge(map, 'B', 'G', 1.12, both, two_way));

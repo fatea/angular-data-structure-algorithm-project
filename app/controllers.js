@@ -124,7 +124,7 @@ controllers.controller('mapControl', ['$scope', function($scope) {
     }
     var lists = shortest_paths_between_every_two_locations($scope.way);
     $scope.path_str = lists.toString();
-    $scope.$broadcast('showPaths', {list: lists});
+    $scope.$broadcast('showPaths', {lists: lists});
   };
 
 }]).
