@@ -44084,7 +44084,10 @@
 	  } else if(!is_letter(_.trim(start)) || !is_letter(_.trim(end))){
 	    alert('起点和终点只能为大写字母');
 	    return false;
-	  } else {
+	  } else if (_.trim(start) == _.trim(end)){
+	    alert('起点和终点应该为不同的两点');
+	    return false;
+	  }else {
 	    return true;
 	  }
 	}
@@ -44105,6 +44108,10 @@
 	}
 
 
+
+
+
+
 	/*
 	var G = new Graph();
 	G.addVertex('hello');
@@ -44114,9 +44121,39 @@
 	controllers.controller('mapControl', ['$scope', function($scope) {
 	  //初始化地图
 	  $scope.constMap = new Map_for_drawing_locations();
-	  $scope.orderProp = 'age';
-	  $scope.edges = [];
+
 	  $scope.way = 0;//默认步行
+	  $scope.startSelected = false;
+	  $scope.endSelected = false;
+	  $scope.startInput = '';
+	  $scope.endInput = '';
+
+	  $scope.$watch('startInput',function(newVal, oldVal){
+	    if(_.isEmpty(_.trim(newVal))){
+	      $scope.startSelected = false;
+
+	    }else if(!is_letter(_.trim(newVal))){
+	      $scope.startSelected = false;
+	    } else {
+	      $scope.startSelected = true;
+	    }
+	  }
+	  );
+
+	  $scope.$watch('endInput',function(newVal, oldVal){
+	      if(_.isEmpty(_.trim(newVal))){
+	        $scope.endSelected = false;
+
+	      }else if(!is_letter(_.trim(newVal))){
+	        $scope.endSelected = false;
+	      } else {
+	        $scope.endSelected = true;
+	      }
+	    }
+	  );
+
+
+
 
 	  //初始化各位置点
 	  $scope.s = Snap('#map');
@@ -44124,12 +44161,29 @@
 	  _.forOwn($scope.constMap.V, function(v){
 	    $scope.circles[v.name] = $scope.s.circle(v.x, v.y, 20);
 	    $scope.circles[v.name].attr({fill: "transparent"});
+
 	    $scope.circles[v.name].dblclick(function(){
 	      $scope.$apply(function(){
-	        $scope.startInput = v.name;
+	        if(!$scope.startSelected && !$scope.endSelected){
+
+	          $scope.startInput = v.name;
+	          $scope.startSelected = true;
+	        } else if ($scope.startSelected && !$scope.endSelected){
+	          $scope.endInput = v.name;
+	          $scope.endSelected = true;
+	        }else if (!$scope.startSelected && $scope.endSelected){
+	          $scope.startInput = v.name;
+	          $scope.startSelected = true;
+	        }else {
+	          $scope.startInput = v.name;
+	          $scope.endSelected = true;
+	        }
 	      });
 	    });
 	  });
+
+
+
 
 	  $scope.show_shortest_path_of_two_given_locations = function(){
 	    if (are_legal($scope.startInput, $scope.endInput)){
@@ -44172,6 +44226,8 @@
 	    $scope.startInput = '';
 	    $scope.endInput = '';
 	    $scope.path_str = '';
+	    $scope.startSelected = false;
+	    $scope.endSelected = false;
 	    $scope.$broadcast('removePaths');
 	  }
 
@@ -44213,9 +44269,10 @@
 	      });
 
 	      scope.$on('showPaths', function(event, data){
+	        /*
 	        data.lists.forEach(function(list){
 	          console.log(list.toString());
-	        });
+	        });*/
 
 	        var point_arrs = [];
 	        data.lists.forEach(function(list){
