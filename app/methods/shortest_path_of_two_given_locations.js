@@ -33,9 +33,9 @@ function shortest_path_of_two_given_locations(way, start, end){
 
 }
 
-var sth = shortest_path_of_two_given_locations(2, 'X', 'N');
-console.log(sth.toString());
-console.log('end');
+//var sth = shortest_path_of_two_given_locations(2, 'X', 'N');
+//console.log(sth.toString());
+//console.log('end');
 
 
 module.exports = shortest_path_of_two_given_locations;

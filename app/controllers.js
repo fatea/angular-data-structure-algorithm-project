@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Snap = require('./bower_components/snap.svg/dist/snap.svg.js');
 
+var FileSaver = require('./bower_components/file-saver.js/FileSaver.js');
 
 /* Controllers */
 var Map_for_drawing_locations = require('./maps/Map_for_drawing_locations.js');
@@ -170,12 +171,25 @@ controllers.controller('mapControl', ['$scope', function($scope) {
         return;
       }
       $scope.startInput = '';
-      var lists = shortest_paths_from_every_other_location($scope.way, $scope.endInput);
+
+      var result = shortest_paths_from_every_other_location($scope.way, $scope.endInput);
+
+
+      var lists = result.path_lists;
+      var length_list = result.length_list;
+      var output_text = '';
+      length_list.forEach(function(line){
+        output_text += line;
+      });
+      var data = new Blob([output_text], { type: 'text/plain;charset=utf-8' });
+      FileSaver.saveAs(data, 'shortest_length_from_every_other_location.txt');
+
+
       $scope.show = 2;
       var lists_str = '';
         lists.forEach(
         function(list){
-          lists_str += (list.toString()+'\n');
+          lists_str += (list.toString()+'\n\n');
         }
       );
       $scope.path_str = lists_str;
@@ -188,12 +202,29 @@ controllers.controller('mapControl', ['$scope', function($scope) {
       alert('请选择显示路径的方式');
       return;
     }
-    var lists = shortest_paths_between_every_two_locations($scope.way);
+
+
+
+    var result = shortest_paths_between_every_two_locations($scope.way);
+
+
+    var lists = result.path_lists;
+    var length_list = result.length_list;
+    var output_text = '';
+    length_list.forEach(function(line){
+      output_text += line;
+    });
+    var data = new Blob([output_text], { type: 'text/plain;charset=utf-8' });
+    FileSaver.saveAs(data, 'shortest_length_between_every_two_locations.txt');
+
+
+
+
     $scope.show = 3;
     var lists_str = '';
     lists.forEach(
       function(list){
-        lists_str += (list.toString()+'\n');
+        lists_str += (list.toString()+'\n\n');
       }
     );
     $scope.path_str = lists_str;
