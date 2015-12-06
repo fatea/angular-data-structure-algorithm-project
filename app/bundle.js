@@ -44128,6 +44128,8 @@
 	  $scope.startInput = '';
 	  $scope.endInput = '';
 
+	  $scope.show = 0;
+
 	  $scope.$watch('startInput',function(newVal, oldVal){
 	    if(_.isEmpty(_.trim(newVal))){
 	      $scope.startSelected = false;
@@ -44151,6 +44153,8 @@
 	      }
 	    }
 	  );
+
+
 
 
 
@@ -44192,6 +44196,7 @@
 	        return;
 	      }
 	      var list = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
+	      $scope.show = 1;
 	      $scope.path_str = list.toString();
 	      $scope.$broadcast('showPath',{list: list});
 	    }
@@ -44206,7 +44211,14 @@
 	      }
 	      $scope.startInput = '';
 	      var lists = shortest_paths_from_every_other_location($scope.way, $scope.endInput);
-	      $scope.path_str = lists.toString();
+	      $scope.show = 2;
+	      var lists_str = '';
+	        lists.forEach(
+	        function(list){
+	          lists_str += (list.toString()+'\n');
+	        }
+	      );
+	      $scope.path_str = lists_str;
 	      $scope.$broadcast('showPaths',{lists: lists});
 	    }
 	  };
@@ -44217,7 +44229,15 @@
 	      return;
 	    }
 	    var lists = shortest_paths_between_every_two_locations($scope.way);
-	    $scope.path_str = lists.toString();
+	    $scope.show = 3;
+	    var lists_str = '';
+	    lists.forEach(
+	      function(list){
+	        lists_str += (list.toString()+'\n');
+	      }
+	    );
+	    $scope.path_str = lists_str;
+
 	    $scope.$broadcast('showPaths', {lists: lists});
 	  };
 
@@ -44228,6 +44248,8 @@
 	    $scope.path_str = '';
 	    $scope.startSelected = false;
 	    $scope.endSelected = false;
+	    $scope.show = 0;
+	    $scope.way = 0;
 	    $scope.$broadcast('removePaths');
 	  }
 
@@ -44262,7 +44284,7 @@
 	        var p1 = scope.s.polyline(point_arr);
 	        p1.attr({
 	          fill: "none",
-	          stroke: "#00FF00",
+	          stroke: "#89E35E",
 	          strokeWidth: 10
 	        });
 
@@ -44312,6 +44334,11 @@
 	    }
 	}
 
+	}).
+	filter('wayFilter', function(){
+	  return function(input){
+	    return
+	  }
 	});
 	/*
 	phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone', function($scope, $routeParams, Phone) {
@@ -65822,8 +65849,10 @@
 	        end_point = end_point.pi;
 	        path_list.unshift(end_point.name);
 	      }
-
+	      //自己到自己的不计入路径
+	      if(path_list.length >= 2){
 	      path_lists.push(path_list);
+	      }
 	    });
 	  }
 	  get_paths();
@@ -65886,8 +65915,9 @@
 	            end_point = end_point.pi;
 	            path_list.unshift(end_point.name);
 	          }
-
-	          path_lists.push(path_list);
+	          if(path_list.length >= 2){
+	            path_lists.push(path_list);
+	          }
 	        }
 
 	      });

@@ -31,8 +31,10 @@ function shortest_paths_from_every_other_location(way, end){
         end_point = end_point.pi;
         path_list.unshift(end_point.name);
       }
-
+      //自己到自己的不计入路径
+      if(path_list.length >= 2){
       path_lists.push(path_list);
+      }
     });
   }
   get_paths();

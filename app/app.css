@@ -46,6 +46,13 @@ div.panel.inputBox {
   height:40%;
 }
 
+textarea {
+  margin-top: 20px;
+  width:70%;
+  height:155px;
+  resize: none;
+}
+
 
 /*
 #wrapper {
@@ -110,7 +117,7 @@ div.loginBoxButtons {
   margin-right: 40px;
 }
 
-.buttons {
+button {
   background-color: grey;
   width: 80px;
   height: 35px;
@@ -119,36 +126,59 @@ div.loginBoxButtons {
   border-radius: 2px;
   font-size: 16px;
   margin-right: 20px;
+  margin-top: 20px;
   cursor: pointer;
 
 }
-.submit {
-  background-color: #EF3043;
-  color: white;
+
+.defaultShow, .selectedShow{
+  width: 180px;
+}
+
+button.defaultWay, button.defaultShow {
+  background-color: white;
+  color: black;
 
 }
-.cancel {
+
+#resetButton {
   background-image: linear-gradient(to bottom,#F0F1F1,#F0F1F1);
 
 }
-
-.submit:hover {
-  background: #37A2F9;
-}
-.cancel:hover {
+#resetButton:hover {
   color: white;
   background: #2B303B;
 }
 
-span.alert {
-  display: none;
-  font-size: 10px;
-  color: red;
+.defaultWay:hover {
+  background: #74ABD9;
+  color:white;
+}
+.selectedWay {
+  background: #74ABD9;
+  color:white;
 }
 
-a.register {
-  float: right;
-  color: #3B70B7;
+.defaultShow:hover {
+  background: #FCD630;
+  color:white;
 }
+.selectedShow {
+  background: #FCD630;
+  color:white;
+}
+
+
+
+/*span.alert {*/
+  /*display: none;*/
+  /*font-size: 10px;*/
+  /*color: red;*/
+/*}*/
+
+/*a.register {*/
+  /*float: right;*/
+  /*color: #3B70B7;*/
+/*}*/
 
 

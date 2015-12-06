@@ -44,8 +44,9 @@ function shortest_paths_between_every_two_locations(way){
             end_point = end_point.pi;
             path_list.unshift(end_point.name);
           }
-
-          path_lists.push(path_list);
+          if(path_list.length >= 2){
+            path_lists.push(path_list);
+          }
         }
 
       });

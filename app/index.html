@@ -20,12 +20,6 @@
 </head>
 <body ng-controller="mapControl">
 
-<!--
-  <ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>
--->
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -39,7 +33,6 @@
 
 <input ng-model="userInput"> Uppercased: {{userInput | uppercase}}
 -->
-<!-- TODO: 使用svg/d3 在地图上画出带颜色线-->
 <div class="map">
   <svg snap-map id="map" version="1.1"
      baseProfile="full"
@@ -66,25 +59,25 @@
 
     <ul>
       <li>
-        <button id="walkingButton"  ng-click="way=1">我要步行</button>
+        <button id="walkingButton" ng-click="way=1" ng-class="{true: 'selectedWay',false:'defaultWay'}[way==1]" >我要步行</button>
       </li>
       <li>
-        <button id="drivingButton" ng-click="way=2">我要开车</button>
+        <button id="drivingButton" ng-click="way=2" ng-class="{true: 'selectedWay',false:'defaultWay'}[way==2]">我要开车</button>
       </li>
       <li>
-        <button id="busButton"    ng-click="way=3">公交优先</button>
+        <button id="busButton" ng-click="way=3" ng-class="{true: 'selectedWay',false:'defaultWay'}[way==3]">公交优先</button>
       </li>
     </ul>
 
     <ul>
       <li>
-        <button id="twoGivenLocationsButton" ng-click="show_shortest_path_of_two_given_locations()">选定两点最短路径</button>
+        <button id="twoGivenLocationsButton"  ng-class="{true: 'selectedShow',false:'defaultShow'}[show==1] "  ng-click="show_shortest_path_of_two_given_locations()">选定两点最短路径</button>
       </li>
       <li>
-        <button id="everyOtherLocationsButton" ng-click="show_shortest_paths_from_every_other_location()">所有点到终点最短路径</button>
+        <button id="everyOtherLocationsButton" ng-class="{true: 'selectedShow',false:'defaultShow'}[show==2]"  ng-click="show_shortest_paths_from_every_other_location()">所有点到终点最短路径</button>
       </li>
       <li>
-        <button id="everyTwoLocationsButton" ng-click="show_shortest_paths_between_every_two_locations()">所有两点间最短路径</button>
+        <button id="everyTwoLocationsButton" ng-class="{true: 'selectedShow',false:'defaultShow'}[show==3]"  ng-click="show_shortest_paths_between_every_two_locations()">所有两点间最短路径</button>
       </li>
     </ul>
 
