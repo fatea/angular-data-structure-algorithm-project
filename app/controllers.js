@@ -127,6 +127,15 @@ controllers.controller('mapControl', ['$scope', function($scope) {
     $scope.$broadcast('showPaths', {lists: lists});
   };
 
+
+  $scope.reset = function(){
+    $scope.startInput = '';
+    $scope.endInput = '';
+    $scope.path_str = '';
+    $scope.$broadcast('removePaths');
+  }
+
+
 }]).
 directive('snapMap', function(){
   return {
@@ -191,6 +200,14 @@ directive('snapMap', function(){
 
         });
 
+      });
+
+
+
+
+
+      scope.$on('removePaths', function(){
+        scope.s.selectAll('polyline').remove();
       });
 
 

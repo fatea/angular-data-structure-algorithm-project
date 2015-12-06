@@ -44167,6 +44167,15 @@
 	    $scope.$broadcast('showPaths', {lists: lists});
 	  };
 
+
+	  $scope.reset = function(){
+	    $scope.startInput = '';
+	    $scope.endInput = '';
+	    $scope.path_str = '';
+	    $scope.$broadcast('removePaths');
+	  }
+
+
 	}]).
 	directive('snapMap', function(){
 	  return {
@@ -44231,6 +44240,14 @@
 
 	        });
 
+	      });
+
+
+
+
+
+	      scope.$on('removePaths', function(){
+	        scope.s.selectAll('polyline').remove();
 	      });
 
 
