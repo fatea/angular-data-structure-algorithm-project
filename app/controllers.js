@@ -156,9 +156,10 @@ controllers.controller('mapControl', ['$scope', function($scope) {
         alert('请选择显示路径的方式');
         return;
       }
-      var list = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
+      var result = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
+      var list = result.list;
       $scope.show = 1;
-      $scope.path_str = list.toString();
+      $scope.path_str = list.toString() + ' '+ result.length;
       $scope.$broadcast('showPath',{list: list});
     }
   };

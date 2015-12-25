@@ -8,6 +8,8 @@ function shortest_path_of_two_given_locations(way, start, end){
 
   Dijkstra(map, map.V[start]);
   var path_list = [];
+  var length = 0;
+  var measurement = (way==3)?' min':' km';
 
   function print_path(){
 
@@ -25,11 +27,13 @@ function shortest_path_of_two_given_locations(way, start, end){
       console.log(name);
     });
     */
+
+    length = new Number(map.V[end].d).toFixed(2);
   }
 
 
   print_path();
-  return path_list;
+  return {list:path_list, length: length+' '+measurement};
 
 }
 

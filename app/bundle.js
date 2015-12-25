@@ -44196,9 +44196,10 @@
 	        alert('请选择显示路径的方式');
 	        return;
 	      }
-	      var list = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
+	      var result = shortest_path_of_two_given_locations($scope.way, $scope.startInput, $scope.endInput);
+	      var list = result.list;
 	      $scope.show = 1;
-	      $scope.path_str = list.toString();
+	      $scope.path_str = list.toString() + ' '+ result.length;
 	      $scope.$broadcast('showPath',{list: list});
 	    }
 	  };
@@ -44255,7 +44256,7 @@
 	      output_text += line;
 	    });
 	    var data = new Blob([output_text], { type: 'text/plain;charset=utf-8' });
-	    FileSaver.saveAs(data, 'shortest_length_from_every_other_location.txt');
+	    FileSaver.saveAs(data, 'shortest_length_between_every_two_locations.txt');
 
 
 
@@ -65335,6 +65336,8 @@
 
 	  Dijkstra(map, map.V[start]);
 	  var path_list = [];
+	  var length = 0;
+	  var measurement = (way==3)?' min':' km';
 
 	  function print_path(){
 
@@ -65352,17 +65355,19 @@
 	      console.log(name);
 	    });
 	    */
+
+	    length = new Number(map.V[end].d).toFixed(2);
 	  }
 
 
 	  print_path();
-	  return path_list;
+	  return {list:path_list, length: length+' '+measurement};
 
 	}
 
-	var sth = shortest_path_of_two_given_locations(2, 'X', 'N');
-	console.log(sth.toString());
-	console.log('end');
+	//var sth = shortest_path_of_two_given_locations(2, 'X', 'N');
+	//console.log(sth.toString());
+	//console.log('end');
 
 
 	module.exports = shortest_path_of_two_given_locations;
